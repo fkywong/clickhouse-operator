@@ -1,0 +1,30 @@
+# GIT_TAG="$( printf '%s-%d-g%s\n' \
+#   $( git describe --tags --always fork/master | cut -d '-' -f 2- ) \
+#   $(( $( git describe --tags --always HEAD | cut -d '-' -f 3 ) - $( git describe --tags --always fork/master | cut -d '-' -f 3 ) )) \
+#   $( git log -1 --format=%h HEAD ) )"
+# gcloud builds submit \
+#   --project ${GCP_PROJECT:?} \
+#   --region us-central1 \
+#   --config cloudbuild.operator.yaml \
+#   --substitutions=_DEST="us-central1-docker.pkg.dev/${GCP_PROJECT:?}/dev-platform/altinity/clickhouse-operator:$GIT_TAG",_VERSION="$GIT_TAG",_GIT_SHA="$( echo "${GIT_TAG##*-g}" )" \
+#   .
+steps:
+- name: gcr.io/cloud-builders/docker
+  env:
+  - DOCKER_BUILDKIT=1
+  args:
+  - build
+  - --platform=linux/amd64
+  - -f
+  - dockerfile/operator/Dockerfile
+  - --build-arg
+  - GO_VERSION=1.25.6
+  - --build-arg
+  - VERSION=$_VERSION
+  - --build-arg
+  - GIT_SHA=$_GIT_SHA
+  - -t
+  - $_DEST
+  - .
+images:
+- $_DEST

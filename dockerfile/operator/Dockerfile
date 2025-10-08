@@ -9,6 +9,10 @@ FROM --platform=${BUILDPLATFORM} golang:${GO_VERSION:-latest} AS builder
 ARG TARGETOS
 ARG TARGETARCH
 ARG GCFLAGS
+ARG VERSION
+ARG GIT_SHA
+ENV VERSION=${VERSION}
+ENV GIT_SHA=${GIT_SHA}
 
 # Install required packages
 RUN apt-get update && \
