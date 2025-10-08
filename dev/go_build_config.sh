@@ -20,9 +20,9 @@ GENERATOR_ROOT="${LOCAL_TMP_ROOT}/generator"
 REPO="github.com/altinity/clickhouse-operator"
 
 # 0.9.3
-VERSION=$(cd "${SRC_ROOT}"; cat release)
+VERSION=${VERSION:-$(cd "${SRC_ROOT}"; cat release)}
 # 885c3f7
-GIT_SHA=$(cd "${SRC_ROOT}"; git rev-parse --short HEAD)
+GIT_SHA=${GIT_SHA:-$(cd "${SRC_ROOT}"; git rev-parse --short HEAD)}
 # 2020-03-07 14:54:56
 NOW=$(date "+%FT%T")
 # Which version of golang to use. Ex.: 1.23.0
